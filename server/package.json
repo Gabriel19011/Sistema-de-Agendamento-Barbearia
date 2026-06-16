@@ -1,0 +1,32 @@
+{
+  "name": "barbearia-api",
+  "version": "1.0.0",
+  "description": "Sistema de agendamento de barbearia - Trabalho Processual PPI",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "nodemon server.ts",
+    "start": "ts-node server.ts"
+  },
+  "keywords": [
+    "typescript",
+    "express",
+    "barbearia",
+    "ppi",
+    "multivix"
+  ],
+  "author": "Grupo PPI",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.3",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}

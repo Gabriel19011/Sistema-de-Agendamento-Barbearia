@@ -1,0 +1,869 @@
+/* =========================================
+   RESET E CONFIGURAÇÃO DA TELA
+========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: #222;
+  overflow: hidden; /* Remove completamente qualquer chance de ter barra de rolagem */
+}
+
+/* =========================================
+   NAVBAR (O CABEÇALHO)
+========================================= */
+.navbar-completa {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px; /* Altura exata travada no topo */
+  background: rgba(16, 16, 16, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999; /* Z-index alto garante que o menu fique sempre na frente */
+}
+
+.outline {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rect {
+  stroke-dashoffset: 5;
+  stroke-dasharray: 0 0 10 40 10 40; /* Desenha os cantos dourados por padrão (estado ocioso) */
+  transition: 0.5s ease-in-out;
+  stroke: #e4ae0b;
+}
+
+.nav {
+  position: relative;
+  width: 700px;
+  height: 90px;
+  border-radius: 40px;
+}
+
+.container:hover .outline .rect {
+  transition: 0.5s;
+  stroke-dashoffset: 0;
+}
+
+.container {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 16, 16, 0.4);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.5em;
+  border-radius: 40px;
+}
+
+.btn {
+  padding: 0.5em 1.5em;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+  text-decoration: none;
+  z-index: 10;
+}
+
+.btn:hover {
+  background: #e4ae0b;
+  border-radius: 10px;
+  color: #101010;
+}
+
+/* Botão marcado como tela atual (apenas cor de fundo e do texto, sem interferir na animação) */
+.btn.active {
+  background: #e4ae0b;
+  border-radius: 10px;
+  color: #101010;
+}
+
+/* =========================================
+   MATEMÁTICA DA LINHA AMARELA (3 BOTÕES)
+========================================= */
+
+/* Quando passa o mouse, a linha se move dos cantos até o respectivo botão */
+.btn:nth-child(1):hover ~ svg .rect { stroke-dasharray: 0 3.88 7.0 72.54 7.0 9.58 !important; }
+.btn:nth-child(2):hover ~ svg .rect { stroke-dasharray: 0 18.65 7.0 43.0 7.0 24.35 !important; }
+.btn:nth-child(3):hover ~ svg .rect { stroke-dasharray: 0 33.42 7.0 13.46 7.0 39.12 !important; }
+
+/* Força o contorno a manter a animação suave */
+.btn:hover ~ .outline .rect {
+  stroke-dashoffset: 0;
+  transition: 0.5s !important;
+}
+
+/* =========================================
+   MAIN E O CARD GIGANTE
+========================================= */
+main {
+  position: absolute;
+  top: 120px; /* Começa exatamente na linha onde a navbar termina */
+  bottom: 0;  /* Gruda no fundo da tela */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #6f6f6f;
+}
+
+.card {
+  position: relative;
+  width: 95%;   /* Ocupa 95% do contêiner main */
+  height: 95%;  /* Ocupa 95% do contêiner main */
+  max-width: 1100px;   /* Limita a largura máxima em monitores grandes */
+  max-height: 650px;   /* Limita a altura máxima em monitores grandes */
+  border-radius: 14px;
+  z-index: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+}
+
+.bg {
+  position: absolute;
+  inset: 8px; 
+  z-index: 2;
+  background: rgba(233, 230, 230, 0.95);
+  backdrop-filter: blur(24px);
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 2px solid white;
+}
+
+/* A bola de luz vermelha */
+.blob {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 30%;  
+  height: 30%; 
+  border-radius: 50%;
+  background-color: #ff0000;
+  opacity: 1;
+  filter: blur(40px);
+  animation: blob-bounce 10s infinite linear;
+}
+
+/* Animação que percorre toda a borda, independente do tamanho do monitor */
+@keyframes blob-bounce {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(233.33%, 0); }
+  50% { transform: translate(233.33%, 233.33%); }
+  75% { transform: translate(0, 233.33%); }
+  100% { transform: translate(0, 0); }
+}
+
+.conteudo-card {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Título principal do card (Lista de Agendamentos) */
+.conteudo-card h2 {
+  color: #101010;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* =========================================
+   FORMULÁRIOS (CADASTRO E ALTERAÇÃO RESPONSIVOS)
+========================================= */
+#formCadastro, #formAlterar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;         /* Flexível em telas menores */
+  max-width: 400px;    /* Limite máximo em telas maiores */
+  padding: 0 20px;     /* Evita que o formulário encoste nas laterais no celular */
+}
+
+/* Polimento geral de todos os campos de entrada */
+#formCadastro input, #formAlterar input {
+  padding: 14px 16px; /* Mais espaçoso e confortável para leitura */
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9); /* Leve transparência de fundo */
+  font-size: 0.95rem;
+  color: #101010;
+  font-weight: 500;
+  width: 100%;
+  outline: none;
+  transition: all 0.3s ease; /* Transições suaves para foco e hover */
+}
+
+/* Efeito de foco interativo com brilho dourado */
+/* Efeito de hover (passar o mouse por cima) - Borda dourada suave */
+#formCadastro input:hover, #formAlterar input:hover {
+  border-color: rgba(228, 174, 11, 0.6); /* Borda dourada sutil e elegante */
+  background: #ffffff; /* Fundo fica totalmente opaco */
+}
+
+/* Efeito de foco (clicar no campo para digitar) - Brilho dourado intenso */
+#formCadastro input:focus, #formAlterar input:focus {
+  border-color: #e4ae0b; /* Borda dourada com tom principal */
+  background: #ffffff; 
+  box-shadow: 0 0 10px rgba(228, 174, 11, 0.4); /* Brilho dourado ao redor do campo */
+}
+
+/* =========================================
+   CUSTOMIZAÇÃO AVANÇADA DO CAMPO DATA/HORA
+========================================= */
+input[type="datetime-local"] {
+  font-family: inherit;
+  cursor: pointer;
+  color: #101010;
+  font-weight: 600;
+}
+
+/* Caixa interna de edição de texto da data/hora */
+input[type="datetime-local"]::-webkit-datetime-edit {
+  padding: 0 4px;
+}
+
+/* Destaca os separadores do calendário (barras "/" e dois pontos ":") em dourado */
+input[type="datetime-local"]::-webkit-datetime-edit-text {
+  color: #e4ae0b; /* Separadores dourados */
+  font-weight: bold;
+  padding: 0 3px;
+}
+
+/* Estilização individual dos subcampos numéricos (dia, mês, ano, hora, minuto) */
+input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+input[type="datetime-local"]::-webkit-datetime-edit-year-field,
+input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
+  color: #333;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Quando o usuário clica ou foca em um subcampo específico para digitar, ele acende em dourado */
+input[type="datetime-local"]::-webkit-datetime-edit-day-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-month-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-year-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-hour-field:focus,
+input[type="datetime-local"]::-webkit-datetime-edit-minute-field:focus {
+  color: #e4ae0b; /* Texto do campo selecionado fica dourado */
+  background-color: rgba(228, 174, 11, 0.15); /* Fundo sutil dourado atrás do número */
+  border-radius: 3px;
+  outline: none;
+}
+
+/* Transforma a cor do ícone de calendário nativo em DOURADO */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  filter: invert(53%) sepia(87%) saturate(541%) hue-rotate(5deg) brightness(97%) contrast(95%);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Efeito de destaque ao passar o cursor sobre o ícone do calendário */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.18);
+}
+/* =========================================
+   CONTAINER E ALINHAMENTO DOS BOTÕES (ALTERAR)
+========================================= */
+.grupo-botoes {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  justify-content: center; /* Centraliza a dupla de botões na tela */
+  align-items: center;
+}
+
+/* =========================================
+   CONTAINER E ALINHAMENTO DOS BOTÕES (ALTERAR)
+========================================= */
+.grupo-botoes {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Ambos os botões herdam o mesmo tamanho dinâmico (flex: 1) e altura */
+.grupo-botoes button {
+  flex: 1;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* =========================================
+   EFEITO DESLIZANTE DINÂMICO (BOTÃO DELETAR - VERMELHO)
+========================================= */
+#btnDeletar {
+  position: relative;
+  background: #e62222 !important;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+}
+
+#btnDeletar, #btnDeletar span {
+  transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#btnDeletar .text {
+  color: white;
+  transform: none;
+  opacity: 1;
+}
+
+#btnDeletar .icon {
+  position: absolute;
+  right: 0;
+  border-left: 1px solid #c41b1b;
+  height: 100%;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e62222 !important;
+}
+
+#btnDeletar svg {
+  width: 15px;
+  fill: #eee;
+}
+
+#btnDeletar:hover {
+  background: #ff3636 !important;
+}
+
+#btnDeletar:hover .text {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+#btnDeletar:hover .icon {
+  width: 100%;
+  background: #ff3636 !important;
+  border-left: none;
+}
+
+#btnDeletar:focus {
+  outline: none;
+}
+
+#btnDeletar:active .icon svg {
+  transform: scale(0.8);
+}
+
+/* =========================================
+   EFEITO DESLIZANTE DINÂMICO (BOTÃO ATUALIZAR - VERDE)
+========================================= */
+#btnAtualizar {
+  position: relative;
+  background: #218838 !important; /* Verde escuro floresta */
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+}
+
+#btnAtualizar, #btnAtualizar span {
+  transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#btnAtualizar .text {
+  color: white;
+  transform: none;
+  opacity: 1;
+}
+
+#btnAtualizar .icon {
+  position: absolute;
+  right: 0;
+  border-left: 1px solid #1e7e34; /* Divisória em verde escuro */
+  height: 100%;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #218838 !important;
+}
+
+#btnAtualizar svg {
+  width: 15px;
+  fill: #eee;
+}
+
+#btnAtualizar:hover {
+  background: #28a745 !important; /* Verde mais brilhante no hover */
+}
+
+#btnAtualizar:hover .text {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+#btnAtualizar:hover .icon {
+  width: 100%;
+  background: #28a745 !important;
+  border-left: none;
+}
+
+#btnAtualizar:focus {
+  outline: none;
+}
+
+#btnAtualizar:active .icon svg {
+  transform: scale(0.8);
+}
+
+/* =========================================
+   CONTAINER E ALINHAMENTO DOS BOTÕES (ALTERAR)
+========================================= */
+.grupo-botoes {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Ambos os botões herdam o mesmo tamanho dinâmico (flex: 1) como antes */
+.grupo-botoes button, #btnAtualizar {
+  flex: 1;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Estilo específico do botão Atualizar */
+#btnAtualizar {
+  background: #e4ae0b;
+  transition: background 0.2s;
+}
+
+#btnAtualizar:hover {
+  background: #f1bd1c;
+}
+
+/* =========================================
+   EFEITO DESLIZANTE DINÂMICO (BOTÃO DELETAR)
+========================================= */
+#btnDeletar {
+  position: relative;
+  background: #e62222 !important; /* Força todo o fundo a ser vermelho */
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: center; /* Centraliza o texto */
+  align-items: center;
+  overflow: hidden; /* Recorta o ícone durante a expansão */
+  padding: 0;
+}
+
+#btnDeletar, #btnDeletar span {
+  transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#btnDeletar .text {
+  color: white;
+  transform: none; /* Mantém centralizado em qualquer resolução */
+  opacity: 1;
+}
+
+#btnDeletar .icon {
+  position: absolute;
+  right: 0; /* Alinha na ponta direita */
+  border-left: 1px solid #c41b1b;
+  height: 100%;
+  width: 45px; /* Largura inicial do quadrado do ícone */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e62222 !important; /* Força o fundo do ícone a ser vermelho */
+}
+
+#btnDeletar svg {
+  width: 15px;
+  fill: #eee;
+}
+
+#btnDeletar:hover {
+  background: #ff3636 !important; /* Fundo vermelho mais vivo no hover */
+}
+
+#btnDeletar:hover .text {
+  opacity: 0; /* O texto desaparece suavemente */
+  transform: scale(0.9);
+}
+
+#btnDeletar:hover .icon {
+  width: 100%; /* Expande dinamicamente para ocupar todo o botão */
+  background: #ff3636 !important; /* Preenche com o mesmo vermelho vivo no hover */
+  border-left: none;
+}
+
+#btnDeletar:focus {
+  outline: none;
+}
+
+#btnDeletar:active .icon svg {
+  transform: scale(0.8);
+}
+/* =========================================
+   ESTILIZAÇÃO DA LISTA DE AGENDAMENTOS (INDEX)
+========================================= */
+.lista-agendamentos {
+  width: 100%;
+  max-width: 650px;   /* Largura de leitura confortável */
+  max-height: 400px;  /* Limita a altura máxima para não vazar do card */
+  overflow-y: auto;   /* Adiciona a barra de rolagem elegante se passar do limite */
+  padding: 10px 15px;
+  list-style: none;    /* Remove completamente as bolinhas padrão (•) */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;           /* Espaçamento uniforme entre cada agendamento */
+  margin-top: 10px;
+}
+
+/* Scrollbar (barra de rolagem) personalizada e elegante */
+.lista-agendamentos::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lista-agendamentos::-webkit-scrollbar-thumb {
+  background: #e4ae0b; /* Cor dourada combinando com o tema */
+  border-radius: 10px;
+}
+
+.lista-agendamentos::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Cada card de agendamento na lista */
+.item-agendamento {
+  background: rgba(16, 16, 16, 0.88); /* Fundo escuro translúcido elegante */
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid #e4ae0b; /* Destaque dourado na borda esquerda */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.item-agendamento:hover {
+  transform: translateY(-2px); /* Efeito de elevação sutil ao passar o mouse */
+  background: rgba(16, 16, 16, 0.95);
+}
+
+.info-cliente h3 {
+  font-size: 1.1rem;
+  color: #e4ae0b; /* Destaca o nome do cliente em dourado */
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.info-cliente p {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.hora-agendamento {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(228, 174, 11, 0.2); /* Horário envolto em um chip dourado discreto */
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* =========================================
+   MEDIA QUERY (AJUSTES PARA CELULAR)
+========================================= */
+@media (max-width: 600px) {
+  .btn {
+    padding: 0.4em 0.8em; /* Reduz espaçamento interno dos botões no celular */
+    font-size: 0.85rem;   /* Reduz o tamanho da fonte do menu */
+  }
+  .lista-agendamentos {
+    max-height: 300px; /* Reduz a área útil em telas pequenas para se ajustar melhor */
+    padding: 10px 5px;
+  }
+  .item-agendamento {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* =========================================
+   EFEITO DESLIZANTE DINÂMICO (BOTÃO SALVAR - DOURADO)
+========================================= */
+#btnSalvar {
+  position: relative;
+  width: 100%; /* Ocupa toda a largura útil do formulário de cadastro */
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* Centraliza o texto */
+  align-items: center;
+  overflow: hidden; /* Recorta o ícone durante a expansão */
+  padding: 0;
+  background: #e4ae0b !important; /* Dourado padrão da barbearia */
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  border: none;
+  border-radius: 8px;
+}
+
+#btnSalvar, #btnSalvar span {
+  transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#btnSalvar .text {
+  color: #101010; /* Texto escuro para contraste no fundo dourado */
+  font-weight: bold;
+}
+
+#btnSalvar .icon {
+  position: absolute;
+  right: 0; /* Alinha na ponta direita */
+  border-left: 1px solid #c99307; /* Divisória em dourado mais escuro */
+  height: 100%;
+  width: 50px; /* Quadrado do ícone */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4ae0b !important;
+}
+
+#btnSalvar svg {
+  width: 18px;
+  fill: #101010; /* Ícone escuro para contraste */
+}
+
+#btnSalvar:hover {
+  background: #f1bd1c !important; /* Dourado brilhante no hover */
+}
+
+#btnSalvar:hover .text {
+  opacity: 0; /* O texto desaparece suavemente */
+  transform: scale(0.9);
+}
+
+#btnSalvar:hover .icon {
+  width: 100%; /* Expande dinamicamente para ocupar todo o botão */
+  background: #f1bd1c !important;
+  border-left: none;
+}
+
+#btnSalvar:focus {
+  outline: none;
+}
+
+#btnSalvar:active .icon svg {
+  transform: scale(0.8);
+}
+
+/* =========================================
+   ANIMAÇÃO DA MÃOZINHA (TAP LOADER AO DIGITAR)
+========================================= */
+.🤚 {
+  --skin-color: #e4ae0b; /* Alinhada com a cor dourada principal do seu tema */
+  --tap-speed: 0.6s;
+  --tap-stagger: 0.1s;
+  position: absolute;
+  bottom: 25px; /* Flutua elegantemente no canto inferior direito do painel */
+  right: 40px;
+  width: 80px;
+  height: 60px;
+  z-index: 100;
+  opacity: 0; /* Oculta a mãozinha por padrão */
+  pointer-events: none;
+  transform: scale(0.6); /* Escala proporcional para encaixar no painel */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Quando houver foco (digitação/seleção) em qualquer campo do card, a mãozinha surge */
+.conteudo-card:focus-within .🤚 {
+  opacity: 1;
+  transform: scale(0.6);
+}
+
+.🤚:before {
+  content: '';
+  display: block;
+  width: 180%;
+  height: 75%;
+  position: absolute;
+  top: 70%;
+  right: 20%;
+  background-color: black;
+  border-radius: 40px 10px;
+  filter: blur(10px);
+  opacity: 0.3;
+}
+
+.🌴 {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--skin-color);
+  border-radius: 10px 40px;
+}
+
+.👍 {
+  position: absolute;
+  width: 120%;
+  height: 38px;
+  background-color: var(--skin-color);
+  bottom: -18%;
+  right: 1%;
+  transform-origin: calc(100% - 20px) 20px;
+  transform: rotate(-20deg);
+  border-radius: 30px 20px 20px 10px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-left: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.👍:after {
+  width: 20%;
+  height: 60%;
+  content: '';
+  background-color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  bottom: -8%;
+  left: 5px;
+  border-radius: 60% 10% 10% 30%;
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.👉 {
+  position: absolute;
+  width: 80%;
+  height: 35px;
+  background-color: var(--skin-color);
+  bottom: 32%;
+  right: 64%;
+  transform-origin: 100% 20px;
+  animation-duration: calc(var(--tap-speed) * 2);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transform: rotate(10deg);
+}
+
+.👉:before {
+  content: '';
+  position: absolute;
+  width: 140%;
+  height: 30px;
+  background-color: var(--skin-color);
+  bottom: 8%;
+  right: 65%;
+  transform-origin: calc(100% - 20px) 20px;
+  transform: rotate(-60deg);
+  border-radius: 20px;
+}
+
+.👉:nth-child(1) {
+  animation-delay: 0;
+  filter: brightness(70%);
+  animation-name: tap-upper-1;
+}
+
+.👉:nth-child(2) {
+  animation-delay: var(--tap-stagger);
+  filter: brightness(80%);
+  animation-name: tap-upper-2;
+}
+
+.👉:nth-child(3) {
+  animation-delay: calc(var(--tap-stagger) * 2);
+  filter: brightness(90%);
+  animation-name: tap-upper-3;
+}
+
+.👉:nth-child(4) {
+  animation-delay: calc(var(--tap-stagger) * 3);
+  filter: brightness(100%);
+  animation-name: tap-upper-4;
+}
+
+@keyframes tap-upper-1 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.4);
+  }
+  40% {
+    transform: rotate(50deg) scale(0.4);
+  }
+}
+
+@keyframes tap-upper-2 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.6);
+  }
+  40% {
+    transform: rotate(50deg) scale(0.6);
+  }
+}
+
+@keyframes tap-upper-3 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(0.8);
+  }
+  40% {
+    transform: rotate(50deg) scale(0.8);
+  }
+}
+
+@keyframes tap-upper-4 {
+  0%, 50%, 100% {
+    transform: rotate(10deg) scale(1);
+  }
+  40% {
+    transform: rotate(50deg) scale(1);
+  }
+}
+
