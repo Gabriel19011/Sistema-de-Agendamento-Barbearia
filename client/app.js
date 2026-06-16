@@ -1,20 +1,16 @@
+"use strict";
 const URL_API_APP = "http://localhost:3000/agendamentos";
-const lista = document.querySelector(".lista-agendamentos") as HTMLUListElement;
-
+const lista = document.querySelector(".lista-agendamentos");
 async function carregarAgendamentos() {
     try {
         const resposta = await fetch(URL_API_APP);
         const dados = await resposta.json();
-        
         lista.innerHTML = "";
-        
-        dados.forEach((agendamento: any) => {
+        dados.forEach((agendamento) => {
             const item = document.createElement("li");
             item.className = "item-agendamento";
-            
             // Garantimos que o horário seja tratado caso esteja vazio
             const horarioFormatado = (agendamento.horario || "").replace("T", " às ");
-            
             // Exibimos o ID para que o usuário saiba qual usar no alterar.html
             item.innerHTML = `
                 <div class="info-cliente">
@@ -27,78 +23,67 @@ async function carregarAgendamentos() {
             `;
             lista.appendChild(item);
         });
-    } catch (erro) {
+    }
+    catch (erro) {
         console.error("Erro ao carregar agendamentos:", erro);
         lista.innerHTML = "<p style='color: white; text-align: center;'>Erro ao carregar agendamentos.</p>";
     }
 }
-
 carregarAgendamentos();
-
 const URL_API_ALTERAR = "http://localhost:3000/agendamentos";
-
-const formAlterar = document.getElementById("formAlterar") as HTMLFormElement | null;
-const idInput = document.getElementById("id") as HTMLInputElement | null;
-const nomeInput = document.getElementById("nome") as HTMLInputElement | null;
-const horarioInput = document.getElementById("horario") as HTMLInputElement | null;
-const corteInput = document.getElementById("corte") as HTMLInputElement | null;
-const btnDeletar = document.getElementById("btnDeletar") as HTMLButtonElement | null;
-
-if (idInput) idInput.placeholder = "Digite o ID do agendamento";
-if (nomeInput) nomeInput.placeholder = "Nome do cliente";
-if (corteInput) corteInput.placeholder = "Tipo de serviço / corte";
-
-interface Agendamento {
-    id: string;
-    nome: string;
-    horario: string;
-    corte: string;
-}
-
+const formAlterar = document.getElementById("formAlterar");
+const idInput = document.getElementById("id");
+const nomeInput = document.getElementById("nome");
+const horarioInput = document.getElementById("horario");
+const corteInput = document.getElementById("corte");
+const btnDeletar = document.getElementById("btnDeletar");
+if (idInput)
+    idInput.placeholder = "Digite o ID do agendamento";
+if (nomeInput)
+    nomeInput.placeholder = "Nome do cliente";
+if (corteInput)
+    corteInput.placeholder = "Tipo de serviço / corte";
 // Busca os dados antigos do agendamento assim que o usuário digita o ID e sai do campo (evento blur)
 if (idInput && nomeInput && horarioInput && corteInput) {
     idInput.addEventListener("blur", async () => {
         const id = idInput.value.trim();
-        if (!id) return;
-
+        if (!id)
+            return;
         try {
             const resposta = await fetch(URL_API_ALTERAR);
             if (resposta.ok) {
-                const agendamentos: Agendamento[] = await resposta.json();
+                const agendamentos = await resposta.json();
                 const agendamento = agendamentos.find(a => String(a.id) === id);
-
                 if (agendamento) {
                     nomeInput.value = agendamento.nome;
                     horarioInput.value = agendamento.horario;
                     corteInput.value = agendamento.corte;
-                } else {
+                }
+                else {
                     alert("Nenhum agendamento com este ID foi encontrado.");
                     nomeInput.value = "";
                     horarioInput.value = "";
                     corteInput.value = "";
                 }
             }
-        } catch (erro) {
+        }
+        catch (erro) {
             console.error("Erro ao carregar agendamento:", erro);
         }
     });
 }
-
 // AÇÃO 1: Atualizar (Submit do formulário)
 if (formAlterar && idInput && nomeInput && horarioInput && corteInput) {
-    formAlterar.addEventListener("submit", async (evento: Event) => {
+    formAlterar.addEventListener("submit", async (evento) => {
         evento.preventDefault();
-
         const id = idInput.value.trim();
         const nome = nomeInput.value;
         const horario = horarioInput.value;
         const corte = corteInput.value;
-
         if (!id) {
             alert("Por favor, informe o ID do agendamento que deseja alterar.");
             return;
         }
-
         try {
             const resposta = await fetch(`${URL_API_ALTERAR}/${id}`, {
                 method: "PUT",
@@ -107,66 +92,59 @@ if (formAlterar && idInput && nomeInput && horarioInput && corteInput) {
                 },
                 body: JSON.stringify({ nome, horario, corte })
             });
-
             if (resposta.ok) {
                 alert("Agendamento atualizado com sucesso!");
                 formAlterar.reset();
                 window.location.href = "index.html";
-            } else {
+            }
+            else {
                 alert("Erro ao atualizar o agendamento no servidor.");
             }
-        } catch (erro) {
+        }
+        catch (erro) {
             console.error(erro);
             alert("Erro ao conectar com o servidor.");
         }
     });
 }
-
 // AÇÃO 2: Deletar (Clique no botão Deletar)
 if (btnDeletar && idInput && formAlterar) {
     btnDeletar.addEventListener("click", async () => {
         const id = idInput.value.trim();
-
         if (!id) {
             alert("Por favor, informe o ID do agendamento que deseja deletar.");
             return;
         }
-
         const confirmou = confirm("Tem certeza de que deseja remover este agendamento permanentemente?");
-        if (!confirmou) return;
-
+        if (!confirmou)
+            return;
         try {
             const resposta = await fetch(`${URL_API_ALTERAR}/${id}`, {
                 method: "DELETE"
             });
-
             if (resposta.ok) {
                 alert("Agendamento excluído com sucesso!");
                 formAlterar.reset();
                 window.location.href = "index.html";
-            } else {
+            }
+            else {
                 alert("Erro ao deletar o agendamento no servidor.");
             }
-        } catch (erro) {
+        }
+        catch (erro) {
             console.error("Erro ao deletar agendamento:", erro);
             alert("Erro ao conectar com o servidor.");
         }
     });
 }
-
 const URL_API_ADICIONAR = "http://localhost:3000/agendamentos";
-
-const formCadastro = document.getElementById("formCadastro") as HTMLFormElement;
-
-formCadastro.addEventListener("submit", async (evento: SubmitEvent) => {
-    
+const formCadastro = document.getElementById("formCadastro");
+formCadastro.addEventListener("submit", async (evento) => {
     // Impede o formulário de recarregar a página
     evento.preventDefault();
-
-    const nome = (document.getElementById("nome") as HTMLInputElement).value;
-    const horario = (document.getElementById("horario") as HTMLInputElement).value;
-    const corte = (document.getElementById("corte") as HTMLInputElement).value;
-
+    const nome = document.getElementById("nome").value;
+    const horario = document.getElementById("horario").value;
+    const corte = document.getElementById("corte").value;
     try {
         const resposta = await fetch(URL_API_ADICIONAR, {
             method: "POST",
@@ -179,18 +157,17 @@ formCadastro.addEventListener("submit", async (evento: SubmitEvent) => {
                 corte
             })
         });
-
         if (resposta.status === 201) {
             alert("Agendamento criado com sucesso!");
             formCadastro.reset();
-            
             // Redireciona o utilizador de volta para a lista
-            window.location.href = "index.html"; 
-        } else {
+            window.location.href = "index.html";
+        }
+        else {
             alert("Erro ao cadastrar. Verifique o servidor.");
         }
-
-    } catch (erro) {
+    }
+    catch (erro) {
         console.error(erro);
         alert("Erro ao conectar com o servidor.");
     }
