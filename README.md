@@ -13,7 +13,7 @@
 Este projeto foi desenvolvido em grupo, com uma separação clara de responsabilidades entre as camadas de Front-end (Cliente) e Back-end (Servidor):
 
 *   **Gabriel Smarzaro Santos** (Desenvolvedor Front-end & UI/UX)
-    *   *Contribuições:* Estruturação semântica das telas em HTML5, estilização responsiva com CSS3 (Mobile-First), lógica de interação dinâmica do DOM, manipulação do seletor Dia/Noite com persistência em cache e integração assíncrona com a API utilizando Fetch/Promises.
+    *   *Contribuições:* Estruturação semântica das telas em HTML5, estilização responsiva com CSS3 (Mobile-First), lógica de interação dinâmica do DOM e integração assíncrona com a API utilizando Fetch/Promises.
 *   **Ewerton Decoté de Aguiar Gomes** (Desenvolvedor Back-end)
     *   *Contribuições:* Modelagem das interfaces de contrato de dados, estruturação e configuração inicial do servidor Node.js com Express e TypeScript.
 *   **Giuseppe Pedruzzi Scherrer** (Desenvolvedor Back-end)
@@ -29,9 +29,6 @@ O **Sistema de Agendamento de Barbearia** é um ecossistema Web Full Stack proje
 
 ### 🌟 Diferenciais e Funcionalidades do Projeto
 *   **CRUD Completo em Memória:** Além das rotas de Listagem (GET) e Cadastro (POST) exigidas no escopo, o grupo implementou as rotas de Atualização (PUT) e Exclusão (DELETE) unificadas na mesma tela.
-*   **Algoritmo de Reaproveitamento de IDs:** O servidor varre a memória e encontra dinamicamente o menor número inteiro disponível após exclusões, evitando saltos desnecessários de chaves primárias.
-*   **Tema Claro/Escuro Persistente:** Seletor interativo AM/PM (Dia/Noite) flutuante com persistência de escolha do usuário no `localStorage` do navegador.
-*   **Segurança de Tipos (Null Safety):** Tratamento rigoroso de objetos nulos com Type Guards no front-end, blindando a aplicação contra falhas catastróficas de execução (como *Cannot read properties of null*).
 *   **Feedback de Digitação:** Mãozinha animada em CSS puro (`:focus-within`) que simula digitação na tela sempre que o usuário interage com um campo de formulário.
 
 ---
